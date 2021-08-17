@@ -44,3 +44,6 @@ $ nest g resource [name]
 
 # To create a controller using the CLI, simply execute the 
 $ nest g controller cats
+
+#To create a new resource, simply run the following command in the root directory of your project:
+$ nest g resource users
