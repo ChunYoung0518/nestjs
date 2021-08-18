@@ -8,19 +8,27 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  UseFilters,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserNotFoundexception } from './exception/user.notfoundexception';
+import { HttpExceptionFilter } from './exception/http-exception.filter';
 
 @Controller('users')
+// apply the exception filter as controller-scoped
+// @UseFilters(HttpExceptionFilter)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseFilters(HttpExceptionFilter)
+  // also can use an filter instance, but not suggested as using a class reduces memory usage.
+  // @UseFilters(new HttpExceptionFilter())
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    throw new UserNotFoundexception();
+    // return this.usersService.create(createUserDto);
   }
 
   @Get()
