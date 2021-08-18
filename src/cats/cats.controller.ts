@@ -1,32 +1,43 @@
-import { Controller, Get, Param, Post, Query, Redirect } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CatsService } from './cats.service';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { UpdateCatDto } from './dto/update-cat.dto';
+import { Cat } from './interface/Cat';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private readonly catsService: CatsService) {}
+
   @Post()
-  create(): string {
-    return 'A cat has been created!';
+  async create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
   }
 
   @Get()
-  findAll(): string {
-    return 'These are the cats the app has!';
+  async findAll(): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
 
   @Get(':id')
-  findCatById(@Param() params): string {
-    return `Returns a cat with id: ${params.id}`;
+  findOne(@Param('id') id: string) {
+    return this.catsService.findOne(+id);
   }
 
-  @Get('abc*z')
-  findSomethingWired() {
-    return 'This route uses a wildcard for handling requests starts with abc and ends with z';
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
+    return this.catsService.update(+id, updateCatDto);
   }
 
-  @Get('docs')
-  @Redirect('https://docs.nestjs.com', 302)
-  getDocs(@Query('version') version) {
-    if (version && version === '5') {
-      return { url: 'https://docs.nestjs.com/v5/' };
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.catsService.remove(+id);
   }
 }
