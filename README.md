@@ -49,3 +49,6 @@ $ nest g resource users
 
 # To create a service using the CLI, simply execute the command:
 $ nest g service cats
+
+# To create a module using the CLI, simply execute the command:
+$ nest g module cats
