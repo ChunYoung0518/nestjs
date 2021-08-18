@@ -16,6 +16,7 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { Cat } from './interface/Cat';
 import { JoiValidationPipe } from './pipe/joi.validation.pipe';
 import Joi from 'joi';
+import { ValidationPipe } from './pipe/validation.pipe';
 
 @Controller('cats')
 export class CatsController {
@@ -25,7 +26,7 @@ export class CatsController {
   // @UsePipes(
   //   new JoiValidationPipe(Joi.object().keys({ name: Joi.string().min(3) })),
   // )
-  async create(@Body() createCatDto: CreateCatDto) {
+  async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
 
