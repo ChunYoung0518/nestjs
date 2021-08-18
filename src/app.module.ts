@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsController } from './cats/cats.controller';
@@ -11,7 +6,7 @@ import { AdminController } from './admin/admin.controller';
 import { UsersModule } from './users/users.module';
 import { CatsModule } from './cats/cats.module';
 import { CatsService } from './cats/cats.service';
-import { LoggerMiddleware } from './middleware/logger/logger.middleware';
+import { logger } from './middleware/logger/logger.middleware';
 
 @Module({
   imports: [UsersModule, CatsModule],
@@ -20,7 +15,7 @@ import { LoggerMiddleware } from './middleware/logger/logger.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('cats');
+    consumer.apply(logger).forRoutes('cats');
     //apply the middleware to the desired request method type
     // consumer
     //   .apply(LoggerMiddleware)
