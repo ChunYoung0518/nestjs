@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -27,8 +29,15 @@ export class CatsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.catsService.findOne(+id);
+  //async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ) {
+    return this.catsService.findOne(id);
   }
 
   @Patch(':id')
