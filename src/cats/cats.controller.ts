@@ -11,6 +11,7 @@ import {
   UsePipes,
   UseGuards,
   SetMetadata,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -20,12 +21,15 @@ import { JoiValidationPipe } from './pipe/joi.validation.pipe';
 import Joi from 'joi';
 import { ValidationPipe } from './pipe/validation.pipe';
 import { RolesGuard } from './guard/roles.guard';
+import { LoggingInterceptor } from './interception/logging.interceptor';
+import { TransformInterceptor } from './interception/transform.interceptor';
 
 //customized decorator for role authorization
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 
 @Controller('cats')
 @UseGuards(RolesGuard)
+@UseInterceptors(LoggingInterceptor, TransformInterceptor)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
