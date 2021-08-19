@@ -9,6 +9,8 @@ import {
   ParseIntPipe,
   HttpStatus,
   UsePipes,
+  UseGuards,
+  SetMetadata,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -17,8 +19,13 @@ import { Cat } from './interface/Cat';
 import { JoiValidationPipe } from './pipe/joi.validation.pipe';
 import Joi from 'joi';
 import { ValidationPipe } from './pipe/validation.pipe';
+import { RolesGuard } from './guard/roles.guard';
+
+//customized decorator for role authorization
+export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 
 @Controller('cats')
+@UseGuards(RolesGuard)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
@@ -26,6 +33,8 @@ export class CatsController {
   // @UsePipes(
   //   new JoiValidationPipe(Joi.object().keys({ name: Joi.string().min(3) })),
   // )
+  // @SetMetadata('roles', ['admin'])//not suggested, see the below best practice
+  @Roles('admin') //best practise
   async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
