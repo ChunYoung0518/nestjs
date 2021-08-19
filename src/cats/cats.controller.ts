@@ -23,9 +23,17 @@ import { ValidationPipe } from './pipe/validation.pipe';
 import { RolesGuard } from './guard/roles.guard';
 import { LoggingInterceptor } from './interception/logging.interceptor';
 import { TransformInterceptor } from './interception/transform.interceptor';
+import { User } from './decorator/user.decorator';
 
 //customized decorator for role authorization
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
+
+class UserEntity {
+  id: number;
+  firstName: string;
+  lastName: string;
+  roles: [];
+}
 
 @Controller('cats')
 @UseGuards(RolesGuard)
@@ -66,7 +74,13 @@ export class CatsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id') id: string,
+    @User() user: UserEntity,
+    @User('firstName') firstName: string,
+  ) {
+    console.log(user);
+    console.log(`${firstName} send a delete request`);
     return this.catsService.remove(+id);
   }
 }
