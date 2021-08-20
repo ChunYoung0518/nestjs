@@ -11,6 +11,9 @@ async function bootstrap() {
   //set up the exception filter for every rounte handler
   // app.useGlobalFilters(new HttpExceptionFilter());
 
+  //listens for shutdown hooks
+  // app.enableShutdownHooks();
+
   await app.listen(3000);
 }
 bootstrap();

@@ -7,11 +7,13 @@ import { UsersModule } from './users/users.module';
 import { CatsModule } from './cats/cats.module';
 import { CatsService } from './cats/cats.service';
 import { logger } from './middleware/logger/logger.middleware';
+import { ModuleEventsService } from './lifecycle/module.events.service';
+import { AppEventsService } from './lifecycle/app.events.service';
 
 @Module({
   imports: [UsersModule, CatsModule],
   controllers: [AppController, CatsController, AdminController],
-  providers: [AppService, CatsService],
+  providers: [AppService, CatsService, AppEventsService, ModuleEventsService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
